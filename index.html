@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Do It - The Minimalist One</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f2ec;color:#1c1a16;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 14px}
+h1{font-size:15px;letter-spacing:8px;text-transform:uppercase;color:#8a8478;margin-bottom:34px}
+#the-thing{font-size:22px;line-height:1.7;text-align:center;max-width:520px;min-height:80px}
+#the-thing:empty::before{content:'one thing. that is all.';color:#b3ac9e;font-size:15px;letter-spacing:2px}
+.row{display:flex;gap:10px;margin-top:26px}
+input{background:transparent;border:none;border-bottom:1px solid #c9c2b4;font-family:inherit;font-size:15px;padding:9px 4px;width:280px;outline:none;text-align:center}
+input:focus{border-color:#1c1a16}
+button{cursor:pointer;background:transparent;color:#1c1a16;border:1px solid #c9c2b4;border-radius:999px;padding:10px 20px;font-family:inherit;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
+button:hover{background:#1c1a16;color:#f5f2ec}
+#count{margin-top:38px;font-size:11px;letter-spacing:3px;color:#b3ac9e;text-transform:uppercase}
+#done-msg{margin-top:16px;font-size:13px;color:#8a8478;min-height:20px}
+</style>
+</head>
+<body>
+<h1>do it</h1>
+<div id="the-thing"></div>
+<div class="row">
+<input id="t" placeholder="the one thing" maxlength="70">
+<button id="set">set it</button>
+<button id="did">did it</button>
+</div>
+<div id="done-msg"></div>
+<div id="count"></div>
+<script>
+const $=id=>document.getElementById(id);
+let thing=localStorage.getItem('doit-thing')||'';
+let done=parseInt(localStorage.getItem('doit-done')||'0');
+function render(){$('the-thing').textContent=thing;$('count').textContent=done+' things done. nothing else tracked. there is nothing else.';}
+$('set').onclick=()=>{const v=$('t').value.trim();if(!v)return;thing=v;$('t').value='';$('done-msg').textContent='';localStorage.setItem('doit-thing',thing);render();};
+$('did').onclick=()=>{if(!thing)return;done++;localStorage.setItem('doit-done',done);$('done-msg').textContent='"'+thing+'" - done. set another when ready.';thing='';localStorage.removeItem('doit-thing');render();};
+$('t').addEventListener('keydown',e=>{if(e.key==='Enter')$('set').click();});
+render();
+</script>
+</body>
+</html>
